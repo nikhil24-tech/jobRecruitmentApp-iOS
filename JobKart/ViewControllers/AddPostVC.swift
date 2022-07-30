@@ -16,7 +16,6 @@ class AddPostVC: UIViewController {
     @IBOutlet weak var txtRequirments: UITextField!
     @IBOutlet weak var btnPost: BlueThemeButton!
     
-    
     var flag = true
     
     
@@ -49,7 +48,7 @@ class AddPostVC: UIViewController {
             
             if error.isEmpty {
                 self.flag = false
-                self.addCreateData(name: self.txtname.text?.trim() ?? "", oAddress: self.txtOAddress.text?.trim() ?? "", email: self.txtEmail.text?.trim() ?? "", Otype: self.txtOType.text?.trim() ?? "", address: self.txtAddress.text?.trim() ?? "", salary: self.txtSalary.text?.trim() ?? "", description: self.txtDescription.text?.trim() ?? "", requirement: self.txtRequirments.text?.trim() ?? "", user_Email: GFunction.user.email ?? "")
+                self.addCreateData(name: self.txtname.text?.trim() ?? "", oAddress: self.txtOAddress.text?.trim() ?? "", email: self.txtEmail.text?.trim() ?? "", Otype: self.txtOType.text?.trim() ?? "", address: self.txtAddress.text?.trim() ?? "", salary: self.txtSalary.text?.trim() ?? "", description: self.txtDescription.text?.trim() ?? "", requirement: self.txtRequirments.text?.trim() ?? "", user_Email: GFunction.user.email)
             }else{
                 Alert.shared.showAlert(message: error, completion: nil)
             }
@@ -66,15 +65,16 @@ class AddPostVC: UIViewController {
         var ref : DocumentReference? = nil
         ref = AppDelegate.shared.db.collection(jJobs).addDocument(data:
                                                                             [
-                                                                                "job_address": oAddress,
-                                                                                "job_name" : name,
-                                                                                "job_oType": Otype,
-                                                                                "job_email": email,
-                                                                                "address": address,
-                                                                                "job_salary" : salary,
-                                                                                "description" : description,
-                                                                                "requirement" : requirement,
-                                                                                "user_email" : user_Email
+                                                                                jJobAddress: oAddress,
+                                                                                jPostName : name,
+                                                                                jJobOType: Otype,
+                                                                                jJobEmail: email,
+                                                                                jAddress: address,
+                                                                                jJobSalary : salary,
+                                                                                jDescription : description,
+                                                                                jRequirement : requirement,
+                                                                                jUserEmail : user_Email,
+                                                                                jUID: GFunction.user.docID
                                                                             ])
         {  err in
             if let err = err {

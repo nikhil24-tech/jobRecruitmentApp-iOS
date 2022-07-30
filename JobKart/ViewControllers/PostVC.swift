@@ -17,7 +17,9 @@ class PostVC: UIViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }else if sender == btnEditPost {
-            Alert.shared.showAlert(message: "Under Development", completion: nil)
+            if let vc = UIStoryboard.main.instantiateViewController(withClass: EditPostListVC.self) {
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
     }
     
