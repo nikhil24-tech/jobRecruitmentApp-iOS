@@ -19,8 +19,17 @@ class RecruiterProfileVC: UIViewController {
     @IBOutlet weak var lblRequirements: UILabel!
     @IBOutlet weak var lblContactInfo: UILabel!
     @IBOutlet weak var lblAddressInfo: UILabel!
+    @IBOutlet weak var imgProfile: UIImageView!
+    
+    
+    var data: UserDataModel!
     
     @IBAction func btnClick(_ sender: UIButton) {
+        if sender == btnBlock {
+            self.blockData(uid: data.docID, isBlock: true)
+        }else if sender == btnUnBlock {
+            self.blockData(uid: data.docID, isBlock: false)
+        }
     }
     
     override func viewDidLoad() {
@@ -32,6 +41,19 @@ class RecruiterProfileVC: UIViewController {
             self.btnUnBlock.layer.cornerRadius = self.btnUnBlock.frame.height/2
         }
         // Do any additional setup after loading the view.
+    }
+    
+    func blockData(uid: String,isBlock: Bool) {
+        let ref = AppDelegate.shared.db.collection(jUser).document(uid)
+        ref.updateData([
+            jIsBlock: isBlock,
+        ]){  err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            } else {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
     }
 
 }

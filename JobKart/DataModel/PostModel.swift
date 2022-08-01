@@ -17,8 +17,10 @@ class PostModel {
     var description: String
     var requirement: String
     var user_email: String
+    var uid: String
+    var favID: String
     
-    init(docId: String, job_address: String, job_name : String, job_oType: String, job_email: String, address: String, job_salary : String, description : String, requirement : String, user_email : String){
+    init(docId: String, job_address: String, job_name : String, job_oType: String, job_email: String, address: String, job_salary : String, description : String, requirement : String, user_email : String, uid: String, favID: String){
         self.job_name = job_name
         self.job_address = job_address
         self.job_oType = job_oType
@@ -29,5 +31,7 @@ class PostModel {
         self.requirement = requirement
         self.user_email = user_email
         self.docID = docId
+        self.uid = uid
+        self.favID = favID
     }
 }
