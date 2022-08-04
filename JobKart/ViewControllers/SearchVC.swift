@@ -19,6 +19,8 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             let tap = UITapGestureRecognizer()
             tap.addAction {
                 if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
+                    vc.isSeeker =  GFunction.user.userType == jJSeeker
+                    vc.data = self.arrData[indexPath.row]
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             }
@@ -43,6 +45,8 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let tap = UITapGestureRecognizer()
         tap.addAction {
             if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
+                vc.isSeeker =  GFunction.user.userType == jJSeeker
+                vc.data = self.arrData[indexPath.row]
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }
@@ -58,16 +62,17 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         var ref : DocumentReference? = nil
         ref = AppDelegate.shared.db.collection(jJobSave).addDocument(data:
                                                                         [
-                                                                            "job_address": data.job_address,
-                                                                            "job_name" : data.job_name,
-                                                                            "job_oType": data.job_oType,
-                                                                            "job_email": data.job_email,
-                                                                            "address": data.address,
-                                                                            "job_salary" : data.job_salary,
-                                                                            "description" : data.description,
-                                                                            "requirement" : data.requirement,
-                                                                            "user_email" : email,
-                                                                            "fav_id": data.docID
+                                                                            jJobAddress: data.job_address,
+                                                                            jPostName : data.job_name,
+                                                                            jJobOType: data.job_oType,
+                                                                            jJobEmail: data.job_email,
+                                                                            jAddress: data.address,
+                                                                            jJobSalary : data.job_salary,
+                                                                            jDescription : data.description,
+                                                                            jRequirement : data.requirement,
+                                                                            jUserEmail : email,
+                                                                            jFavID: data.docID,
+                                                                            jUID: GFunction.user.docID
                                                                         ])
         {  err in
             if let err = err {
@@ -83,7 +88,7 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     
     func checkAddToSave(data: PostModel, email:String) {
-        _ = AppDelegate.shared.db.collection(jJobSave).whereField("user_email", isEqualTo: email).whereField("fav_id", isEqualTo: data.docID).addSnapshotListener{ querySnapshot, error in
+        _ = AppDelegate.shared.db.collection(jJobSave).whereField(jUserEmail, isEqualTo: email).whereField(jFavID, isEqualTo: data.docID).addSnapshotListener{ querySnapshot, error in
             
             guard let snapshot = querySnapshot else {
                 print("Error fetching snapshots: \(error!)")
@@ -142,7 +147,7 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     
     func getData() {
-        _ = AppDelegate.shared.db.collection(jJobs).whereField("user_email", isEqualTo: GFunction.user.email).addSnapshotListener{ querySnapshot, error in
+        _ = AppDelegate.shared.db.collection(jJobs).whereField(jUID, isEqualTo: GFunction.user.docID).addSnapshotListener{ querySnapshot, error in
             
             guard let snapshot = querySnapshot else {
                 print("Error fetching snapshots: \(error!)")
@@ -152,17 +157,18 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             if snapshot.documents.count != 0 {
                 for data in snapshot.documents {
                     let data1 = data.data()
-                    if  let job_address: String = data1["job_address"] as? String,
-                        let job_name: String = data1["job_name"] as? String,
-                        let job_oType: String = data1["job_oType"] as? String,
-                        let job_email: String = data1["job_email"] as? String,
-                        let address: String = data1["address"] as?  String,
-                        let job_salary: String = data1["job_salary"] as? String,
-                        let description: String = data1["description"] as? String,
-                        let requirement: String = data1["requirement"] as? String,
-                        let user_email: String = data1["user_email"] as? String
+                    if  let job_address: String = data1[jJobAddress] as? String,
+                        let job_name: String = data1[jPostName] as? String,
+                        let job_oType: String = data1[jJobOType] as? String,
+                        let job_email: String = data1[jJobEmail] as? String,
+                        let address: String = data1[jAddress] as?  String,
+                        let job_salary: String = data1[jJobSalary] as? String,
+                        let description: String = data1[jDescription] as? String,
+                        let requirement: String = data1[jRequirement] as? String,
+                        let user_email: String = data1[jUserEmail] as? String,
+                        let uid: String = data1[jUID] as? String
                     {
-                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email: job_email, address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: user_email))
+                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email: job_email, address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: user_email,uid: uid,favID: ""))
                     }
                 }
                 
@@ -188,17 +194,19 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             if snapshot.documents.count != 0 {
                 for data in snapshot.documents {
                     let data1 = data.data()
-                    if  let job_address: String = data1["job_address"] as? String,
-                        let job_name: String = data1["job_name"] as? String,
-                        let job_oType: String = data1["job_oType"] as? String,
-                        let job_email: String = data1["job_email"] as? String,
-                        let address: String = data1["address"] as?  String,
-                        let job_salary: String = data1["job_salary"] as? String,
-                        let description: String = data1["description"] as? String,
-                        let requirement: String = data1["requirement"] as? String,
-                        let user_email: String = data1["user_email"] as? String
+                    if  let job_address: String = data1[jJobAddress] as? String,
+                        let job_name: String = data1[jPostName] as? String,
+                        let job_oType: String = data1[jJobOType] as? String,
+                        let job_email: String = data1[jJobEmail] as? String,
+                        let address: String = data1[jAddress] as?  String,
+                        let job_salary: String = data1[jJobSalary] as? String,
+                        let description: String = data1[jDescription] as? String,
+                        let requirement: String = data1[jRequirement] as? String,
+                        let user_email: String = data1[jUserEmail] as? String,
+                        let uid: String = data1[jUID] as? String
+                        
                     {
-                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email: job_email, address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: user_email))
+                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email: job_email, address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: user_email,uid: uid,favID: ""))
                     }
                 }
                 
