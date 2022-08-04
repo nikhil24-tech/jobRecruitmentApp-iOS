@@ -25,7 +25,7 @@ class LoginVC: UIViewController {
                 UIApplication.shared.setAdmin()
             }else{
                 let type = (index == 1) ? jJSeeker : jEmp
-                self.loginUser(email: self.txtEmail.text ?? "", password: self.txtPassword.text ?? "", userType: type)
+                self.firebaseLogin(data: self.txtEmail.text ?? "", password: self.txtPassword.text ?? "", userType: type)
             }
         }else{
             Alert.shared.showAlert(message: error, completion: nil)
@@ -66,8 +66,25 @@ class LoginVC: UIViewController {
 
 //MARK:- Extension for Login Function
 extension LoginVC {
-    func loginUser(email:String,password:String,userType:String) {
-        _ = AppDelegate.shared.db.collection(jUser).whereField(jEmail, isEqualTo: email).whereField(jPassword, isEqualTo: password).whereField(jUserType, isEqualTo: userType).addSnapshotListener{ querySnapshot, error in
+    
+    //Firebase Authentication Login
+    func firebaseLogin(data: String, password: String, userType:String) {
+        FirebaseAuth.Auth.auth().signIn(withEmail: data, password: password) { [weak self] authResult, error in
+            guard self != nil else { return }
+            //return if any error find
+            if error != nil {
+                Alert.shared.showAlert(message: error?.localizedDescription.description ?? "", completion: nil )
+            }else{
+                let uid = FirebaseAuth.Auth.auth().currentUser?.uid ?? ""
+                
+                self?.loginUser(uid: uid, userType: userType)
+            }
+        }
+    }
+    
+    
+    func loginUser(uid: String,userType:String) {
+        _ = AppDelegate.shared.db.collection(jUser).whereField(jUID, isEqualTo: uid).whereField(jUserType, isEqualTo: userType).addSnapshotListener{ querySnapshot, error in
             
             guard let snapshot = querySnapshot else {
                 print("Error fetching snapshots: \(error!)")
@@ -76,15 +93,20 @@ extension LoginVC {
             
             if snapshot.documents.count != 0 {
                 let data1 = snapshot.documents[0].data()
-                let docId = snapshot.documents[0].documentID
-                if let name: String = data1[jName] as? String, let phone: String = data1[jPhone] as? String, let email: String = data1[jEmail] as? String, let password: String = data1[jPassword] as? String, let oType: String = data1[jOrganizationType] as? String {
-                    GFunction.user = UserModel(docID: docId, name: name, mobile: phone, email: email, password: password, organizationType: oType, userType: userType)
-                }
-                GFunction.shared.firebaseRegister(data: email)
-                if self.index == 0 {
-                    UIApplication.shared.setEmp()
-                }else if self.index == 1 {
-                    UIApplication.shared.setSeeker()
+                if let name: String = data1[jName] as? String, let phone: String = data1[jPhone] as? String, let email: String = data1[jEmail] as? String, let password: String = data1[jPassword] as? String, let oType: String = data1[jOrgType] as? String, let uid: String = data1[jUID] as? String {
+                    GFunction.user = UserModel(docID: uid, name: name, mobile: phone, email: email, password: password, organizationType: oType, userType: userType)
+                    
+                    if let isBlock: Bool = data1[jIsBlock] as? Bool {
+                        if isBlock {
+                            Alert.shared.showAlert(message: "Admin blocked you, so contact him again !!!", completion: nil)
+                        }else{
+                            if self.index == 0 {
+                                UIApplication.shared.setEmp()
+                            }else if self.index == 1 {
+                                UIApplication.shared.setSeeker()
+                            }
+                        }
+                    }
                 }
             }else{
                 if !self.flag {

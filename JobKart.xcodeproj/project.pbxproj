@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B7044A3289858AD008F2063 /* EmployeeProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B7044A2289858AD008F2063 /* EmployeeProfileVC.swift */; };
 		CDEC06ADCB1BC602BD50F5DB /* Pods_JobKart.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA5306E8579EA690806E33D2 /* Pods_JobKart.framework */; };
 		DB1D8BA7287F47B200EEFDAF /* AdminCandidateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1D8BA6287F47B200EEFDAF /* AdminCandidateVC.swift */; };
 		DB22A2CA28735D3C0064741D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB22A2C928735D3C0064741D /* AppDelegate.swift */; };
@@ -62,6 +63,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5B7044A2289858AD008F2063 /* EmployeeProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeProfileVC.swift; sourceTree = "<group>"; };
 		8D1BDA4C164622191D0FB026 /* Pods-JobKart.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobKart.debug.xcconfig"; path = "Target Support Files/Pods-JobKart/Pods-JobKart.debug.xcconfig"; sourceTree = "<group>"; };
 		CA5306E8579EA690806E33D2 /* Pods_JobKart.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JobKart.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB1D8BA6287F47B200EEFDAF /* AdminCandidateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminCandidateVC.swift; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 				DBAA55D92882D5E8002B9527 /* SearchVC.swift */,
 				DBAA55DD2882DB8B002B9527 /* PostVC.swift */,
 				DBAA55DF2882DBED002B9527 /* AddPostVC.swift */,
+				5B7044A2289858AD008F2063 /* EmployeeProfileVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -309,8 +312,8 @@
 			);
 			mainGroup = DB22A2BD28735D3C0064741D;
 			packageReferences = (
-				DB98F8BF28774A5100068186 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */,
-				DB6A6298287AE30F0000E9A6 /* XCRemoteSwiftPackageReference "SDWebImage.git" */,
+				DB98F8BF28774A5100068186 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				DB6A6298287AE30F0000E9A6 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 			);
 			productRefGroup = DB22A2C728735D3C0064741D /* Products */;
 			projectDirPath = "";
@@ -388,6 +391,7 @@
 				DB4A562E2876167500097DF6 /* Alert.swift in Sources */,
 				DB4A562B2876167500097DF6 /* UIImageView+Extensions.swift in Sources */,
 				DBAA55D62882D008002B9527 /* UserSettingVC.swift in Sources */,
+				5B7044A3289858AD008F2063 /* EmployeeProfileVC.swift in Sources */,
 				DBAA55E02882DBED002B9527 /* AddPostVC.swift in Sources */,
 				DBAA55DE2882DB8B002B9527 /* PostVC.swift in Sources */,
 				DB4A562F2876167500097DF6 /* UILabel+Extension.swift in Sources */,
@@ -647,7 +651,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		DB6A6298287AE30F0000E9A6 /* XCRemoteSwiftPackageReference "SDWebImage.git" */ = {
+		DB6A6298287AE30F0000E9A6 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
 			requirement = {
@@ -655,7 +659,7 @@
 				minimumVersion = 5.0.0;
 			};
 		};
-		DB98F8BF28774A5100068186 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */ = {
+		DB98F8BF28774A5100068186 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
@@ -668,27 +672,27 @@
 /* Begin XCSwiftPackageProductDependency section */
 		DB6A6299287AE3100000E9A6 /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DB6A6298287AE30F0000E9A6 /* XCRemoteSwiftPackageReference "SDWebImage.git" */;
+			package = DB6A6298287AE30F0000E9A6 /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
 		};
 		DB98F8C028774A5200068186 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DB98F8BF28774A5100068186 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
+			package = DB98F8BF28774A5100068186 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
 		};
 		DB98F8C228774A5200068186 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DB98F8BF28774A5100068186 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
+			package = DB98F8BF28774A5100068186 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
 		};
 		DB98F8C428774A5200068186 /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DB98F8BF28774A5100068186 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
+			package = DB98F8BF28774A5100068186 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
 		};
 		DB98F8C628774A5200068186 /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DB98F8BF28774A5100068186 /* XCRemoteSwiftPackageReference "firebase-ios-sdk.git" */;
+			package = DB98F8BF28774A5100068186 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */

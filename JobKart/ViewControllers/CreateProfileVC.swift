@@ -28,12 +28,13 @@ class CreateProfileVC: UIViewController, UINavigationControllerDelegate {
     var imageURL = ""
     var email: String = ""
     var phone: String = ""
+    var uid: String = ""
     
     func setUp() {
         if index == 1 {
-            self.updateView(data: false)
-        } else {
             self.updateView(data: true)
+        } else {
+            self.updateView(data: false)
         }
     }
     
@@ -51,18 +52,6 @@ class CreateProfileVC: UIViewController, UINavigationControllerDelegate {
     
     private func validation() -> String {
         if index == 1 {
-            if self.txtAddress.text?.trim() == "" {
-                return STRING.errorAddress
-            }else if self.txtEducationLevel.text?.trim() == "" {
-                return STRING.errorEducationLevel
-            }else if self.txtJobExp.text?.trim() == "" {
-                return STRING.errorJobExp
-            }else if self.txtSkills.text?.trim() == "" {
-                return STRING.errorSkills
-            }else if self.txtAboutMe.text?.trim() == "" {
-                return STRING.errorAboutMe
-            }
-        } else {
             if self.txtOName.text?.trim() == "" {
                 return STRING.errorOName
             }else if self.txtEmail.text?.trim() == "" {
@@ -73,6 +62,19 @@ class CreateProfileVC: UIViewController, UINavigationControllerDelegate {
                 return STRING.errorOType
             }else if self.txtAddress.text?.trim() == "" {
                 return STRING.errorAddress
+            }
+            
+        } else {
+            if self.txtAddress.text?.trim() == "" {
+                return STRING.errorAddress
+            }else if self.txtEducationLevel.text?.trim() == "" {
+                return STRING.errorEducationLevel
+            }else if self.txtJobExp.text?.trim() == "" {
+                return STRING.errorJobExp
+            }else if self.txtSkills.text?.trim() == "" {
+                return STRING.errorSkills
+            }else if self.txtAboutMe.text?.trim() == "" {
+                return STRING.errorAboutMe
             }
         }
         return ""
@@ -255,25 +257,22 @@ extension CreateProfileVC: UIImagePickerControllerDelegate, OpalImagePickerContr
     }
     
     func addCreateData(address: String, oName:String,oType: String,educationLevel: String,skills: String, aboutMe:String, email:String, phone: String) {
-        var ref : DocumentReference? = nil
-        ref = AppDelegate.shared.db.collection(jProfileData).addDocument(data:
-            [
-              "address": address,
-              "oName" : oName,
-              "oType": oType,
-              "educationLevel": educationLevel,
-              "skills": skills,
-              "imagePath" : self.imageURL,
-              "aboutMe" : aboutMe,
-              jEmail: email,
-              jPhone: phone
-            ])
-        {  err in
+        
+        let ref = AppDelegate.shared.db.collection(jUser).document(uid)
+        ref.updateData([
+            jOrgAddress: address,
+            jOrgName : oName,
+            jOrgType: oType,
+            jJSEduLevel: educationLevel,
+            jSkills: skills,
+            jOrgImageURL : self.imageURL,
+            jJSAboutMe : aboutMe,
+        ]){  err in
             if let err = err {
                 print("Error adding document: \(err)")
             } else {
-                print("Document added with ID: \(ref!.documentID)")
                 if let vc = UIStoryboard.main.instantiateViewController(withClass: LoginVC.self){
+                    vc.index = self.index
                     self.navigationController?.pushViewController(vc, animated: true)
                 }
             }

@@ -1,26 +1,22 @@
 //
-//  RecruiterProfileVC.swift
+//  EmployeeProfileVC.swift
 //  JobKart
-
 
 import UIKit
 
-
-
-class RecruiterProfileVC: UIViewController {
+class EmployeeProfileVC: UIViewController {
 
     @IBOutlet weak var vwMain: UIView!
     @IBOutlet weak var btnBlock: UIButton!
     @IBOutlet weak var btnUnBlock: UIButton!
     @IBOutlet weak var lblName: UILabel!
-    @IBOutlet weak var lblRole: UILabel!
     @IBOutlet weak var lblAddress: UILabel!
-    @IBOutlet weak var lblDesription: UILabel!
-    @IBOutlet weak var lblRequirements: UILabel!
-    @IBOutlet weak var lblContactInfo: UILabel!
-    @IBOutlet weak var lblAddressInfo: UILabel!
+    @IBOutlet weak var lblPhone: UILabel!
+    @IBOutlet weak var lblSkills: UILabel!
+    @IBOutlet weak var lblAboutMe: UILabel!
+    @IBOutlet weak var lblExp: UILabel!
+    @IBOutlet weak var lblEmail: UILabel!
     @IBOutlet weak var imgProfile: UIImageView!
-    
     
     var data: UserDataModel!
     
@@ -42,6 +38,7 @@ class RecruiterProfileVC: UIViewController {
         }
         // Do any additional setup after loading the view.
     }
+    
     
     func blockData(uid: String,isBlock: Bool) {
         let ref = AppDelegate.shared.db.collection(jUser).document(uid)
