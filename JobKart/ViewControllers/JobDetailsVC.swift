@@ -28,7 +28,11 @@ class JobDetailsVC: UIViewController {
     
     @IBAction func btnClick(_ sender: UIButton) {
         if sender == btnApplyJob {
-            Alert.shared.showAlert(message: "Under Development", completion: nil)
+            if let vc = UIStoryboard.main.instantiateViewController(withClass: ApplyJobVC.self){
+                vc.modalTransitionStyle = .crossDissolve
+                vc.jobData = self.data
+                self.navigationController?.present(vc, animated: true, completion: nil)
+            }
         }else if sender == btnSaveJob {
             if isFromAdmin {
                 Alert.shared.showAlert("JobKart", actionOkTitle: "Delete", actionCancelTitle: "Cancel", message: "Are you sure you want to delete this job ?") { Bool in
@@ -97,7 +101,7 @@ class JobDetailsVC: UIViewController {
             } else {
                 print("Document added with ID: \(ref!.documentID)")
                 Alert.shared.showAlert(message: "Job has been added into Save list!!!") { (true) in
-                    UIApplication.shared.setEmp()
+                    UIApplication.shared.setSeeker()
                 }
             }
         }

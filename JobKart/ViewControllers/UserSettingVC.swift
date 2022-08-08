@@ -16,7 +16,15 @@ class UserSettingVC: UIViewController {
         if sender == btnSignOut {
             UIApplication.shared.setStart()
         }else if sender == btnEditProfile {
-            Alert.shared.showAlert(message: "Under Development", completion: nil)
+            if GFunction.user.userType == jJSeeker {
+                if let vc = UIStoryboard.main.instantiateViewController(withClass: EditSeekarProfile.self) {
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }else{
+                if let vc = UIStoryboard.main.instantiateViewController(withClass: EditEMPProfileVC.self) {
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
         }else if sender == btnChangePassword {
             Alert.shared.showAlert(message: "Under Development", completion: nil)
         }
