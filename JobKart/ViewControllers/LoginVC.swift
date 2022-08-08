@@ -22,6 +22,7 @@ class LoginVC: UIViewController {
         
         if error.isEmpty {
             if self.txtEmail.text == "Admin@gmail.com" && self.txtPassword.text == "Admin@1234" && index == 2{
+                GFunction.isAdmin = true
                 UIApplication.shared.setAdmin()
             }else{
                 let type = (index == 1) ? jJSeeker : jEmp
@@ -96,6 +97,15 @@ extension LoginVC {
                 if let name: String = data1[jName] as? String, let phone: String = data1[jPhone] as? String, let email: String = data1[jEmail] as? String, let password: String = data1[jPassword] as? String, let oType: String = data1[jOrgType] as? String, let uid: String = data1[jUID] as? String {
                     GFunction.user = UserModel(docID: uid, name: name, mobile: phone, email: email, password: password, organizationType: oType, userType: userType)
                     
+                    if userType == jEmp {
+                        GFunction.userData = UserDataModel(docID: uid, name: name, mobile: phone, email: email, password: password, organizationType: oType, userType: userType, orgAddress: "", orgName: "", eduLevel: data1[jJSEduLevel] as? String ?? "", skills: data1[jSkills] as? String ?? "", orgImageURL: data1[jJSImageURL] as? String ?? "", aboutMe: data1[jJSAboutMe] as? String ?? "", isBlock: data1[jIsBlock] as? Bool ?? false)
+                    }else{
+                        GFunction.userData = UserDataModel(docID: uid, name: name, mobile: phone, email: email, password: password, organizationType: oType, userType: userType, orgAddress: "", orgName: "", eduLevel: data1[jJSEduLevel] as? String ?? "", skills: data1[jSkills] as? String ?? "", orgImageURL: data1[jJSImageURL] as? String ?? "", aboutMe: data1[jJSAboutMe] as? String ?? "", isBlock: data1[jIsBlock] as? Bool ?? false)
+                    }
+                    
+                    
+                    
+                    GFunction.isAdmin = false
                     if let isBlock: Bool = data1[jIsBlock] as? Bool {
                         if isBlock {
                             Alert.shared.showAlert(message: "Admin blocked you, so contact him again !!!", completion: nil)

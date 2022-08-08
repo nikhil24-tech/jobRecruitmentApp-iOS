@@ -59,7 +59,7 @@ class SignUpVC: UIViewController {
         }else if !Validation.isValidPhoneNumber(phone) {
             return STRING.errorValidMobile
         }else if Otype.isEmpty {
-            return STRING.errorOType
+            return index == 1 ? STRING.errorOccupation : STRING.errorOType
         }else if password.isEmpty {
             return STRING.errorPassword
         } else if password.count < 8 {
@@ -82,6 +82,7 @@ class SignUpVC: UIViewController {
 
         if index == 1 {
             self.lblTitle.text = "I’m \nJobSeeker"
+            self.txtOType.placeholder = "Occupation"
         }else if index == 2 {
             self.lblTitle.text = "Admin"
         }
@@ -118,16 +119,25 @@ extension SignUpVC {
     
     func createAccount(name: String, email: String, mobile: String, password: String, organizationType: String, usertType: String, uid: String) {
     
-        AppDelegate.shared.db.collection(jUser).document(uid).setData([
-              jPhone: mobile,
-              jEmail: email,
-              jName: name,
-              jPassword : password,
-              jOrgType:  organizationType,
-              jUserType: usertType,
-              jIsBlock: false,
-              jUID: uid
-            ])
+        var data : [String: Any] = [ jUserType: usertType,
+                                          jUID: uid,
+                                     jPassword: password,
+                                      jIsBlock: false,
+                                        jName : name,
+                                       jPhone : mobile,
+                                        jEmail: email]
+        
+        if index == 1 {
+            data[jName] = name
+            data[jPhone] = mobile
+            data[jOrgType] = organizationType
+        }else{
+            data[jJSName] = name
+            data[jJSPhone] = mobile
+            data[jOccupation] = organizationType
+        }
+        
+        AppDelegate.shared.db.collection(jUser).document(uid).setData(data)
         {  err in
             if let err = err {
                 print("Error adding document: \(err)")
