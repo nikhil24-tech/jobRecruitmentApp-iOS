@@ -1,6 +1,5 @@
 //
 //  AcceptRejectVC.swift
-//  JobKart
 
 
 import UIKit
