@@ -90,4 +90,4 @@ let jEmpEmail       = "empEmail"
 
 
 let jEmp        = "employer"
-let jJSeeker    = "jobSeeker"
+let jJSeeker    = "jobseeker"
