@@ -51,7 +51,8 @@ class RecruiterProfileVC: UIViewController {
             if let err = err {
                 print("Error adding document: \(err)")
             } else {
-                self.navigationController?.popViewController(animated: true)
+                UIApplication.shared.setAdmin()
+//                self.navigationController?.popViewController(animated: true)
             }
         }
     }

@@ -26,15 +26,16 @@ class CreateProfileVC: UIViewController, UINavigationControllerDelegate {
     var imgPicker1 = OpalImagePickerController()
     var isImageSelected : Bool = false
     var imageURL = ""
+    var imgData: UIImage!
     var email: String = ""
     var phone: String = ""
     var uid: String = ""
     
     func setUp() {
         if index == 1 {
-            self.updateView(data: true)
-        } else {
             self.updateView(data: false)
+        } else {
+            self.updateView(data: true)
         }
     }
     
@@ -51,7 +52,23 @@ class CreateProfileVC: UIViewController, UINavigationControllerDelegate {
     }
     
     private func validation() -> String {
+        if self.imgData == nil {
+            return "Please select Image"
+        }
         if index == 1 {
+            if self.txtAddress.text?.trim() == "" {
+                return STRING.errorAddress
+            }else if self.txtEducationLevel.text?.trim() == "" {
+                return STRING.errorEducationLevel
+            }else if self.txtJobExp.text?.trim() == "" {
+                return STRING.errorJobExp
+            }else if self.txtSkills.text?.trim() == "" {
+                return STRING.errorSkills
+            }else if self.txtAboutMe.text?.trim() == "" {
+                return STRING.errorAboutMe
+            }
+            
+        } else {
             if self.txtOName.text?.trim() == "" {
                 return STRING.errorOName
             }else if self.txtEmail.text?.trim() == "" {
@@ -64,18 +81,6 @@ class CreateProfileVC: UIViewController, UINavigationControllerDelegate {
                 return STRING.errorAddress
             }
             
-        } else {
-            if self.txtAddress.text?.trim() == "" {
-                return STRING.errorAddress
-            }else if self.txtEducationLevel.text?.trim() == "" {
-                return STRING.errorEducationLevel
-            }else if self.txtJobExp.text?.trim() == "" {
-                return STRING.errorJobExp
-            }else if self.txtSkills.text?.trim() == "" {
-                return STRING.errorSkills
-            }else if self.txtAboutMe.text?.trim() == "" {
-                return STRING.errorAboutMe
-            }
         }
         return ""
     }
@@ -113,7 +118,8 @@ class CreateProfileVC: UIViewController, UINavigationControllerDelegate {
     @IBAction func btnAddClick(_ sender: UIButton) {
         let error = self.validation()
         if error == "" {
-            self.addCreateData(address: self.txtAddress.text ?? "", oName: self.txtOName.text ?? "", oType: self.txtOType.text ?? "", educationLevel: self.txtEducationLevel.text ?? "", skills: self.txtSkills.text ?? "", aboutMe: self.txtAboutMe.text ?? "", email: self.email, phone: self.phone)
+            self.uploadImagePic(img1: self.imgData, address: self.txtAddress.text ?? "", oName: self.txtOName.text ?? "", oType: self.txtOType.text ?? "", educationLevel: self.txtEducationLevel.text ?? "", skills: self.txtSkills.text ?? "", aboutMe: self.txtAboutMe.text ?? "", email: self.email, phone: self.phone, jobExp: self.txtJobExp.text?.trim() ?? "")
+            
         }else{
             Alert.shared.showAlert(message: error, completion: nil)
         }
@@ -194,7 +200,7 @@ class CreateProfileVC: UIViewController, UINavigationControllerDelegate {
 
 //MARK:- UIImagePickerController Delegate Methods
 extension CreateProfileVC: UIImagePickerControllerDelegate, OpalImagePickerControllerDelegate {
-    func uploadImagePic(img1 :UIImage){
+    func uploadImagePic(img1 :UIImage,address: String, oName:String,oType: String,educationLevel: String,skills: String, aboutMe:String, email:String, phone: String, jobExp: String){
         let data = img1.jpegData(compressionQuality: 0.8)! as NSData
         // set upload path
         let imagePath = GFunction.shared.UTCToDate(date: Date())
@@ -211,7 +217,7 @@ extension CreateProfileVC: UIImagePickerControllerDelegate, OpalImagePickerContr
                 self.isImageSelected = true
                 self.imageURL = url?.absoluteString ?? ""
                 print(url?.absoluteString) // <- Download URL
-                self.imgProfile.setImgWebUrl(url: self.imageURL, isIndicator: true)
+                self.addCreateData(address: address, oName: oName, oType: oType, educationLevel: educationLevel, skills: skills, aboutMe: aboutMe, email: email, phone: phone, jobExp: jobExp)
             })
         }
     }
@@ -221,7 +227,7 @@ extension CreateProfileVC: UIImagePickerControllerDelegate, OpalImagePickerContr
             picker.dismiss(animated: true)
         }
         if let image = info[.editedImage] as? UIImage {
-            uploadImagePic(img1: image)
+            self.imgData = image
             self.imgProfile.image = image
         }
 
@@ -234,7 +240,7 @@ extension CreateProfileVC: UIImagePickerControllerDelegate, OpalImagePickerContr
     func imagePicker(_ picker: OpalImagePickerController, didFinishPickingAssets assets: [PHAsset]){
         for image in assets {
             if let image = getAssetThumbnail(asset: image) as? UIImage {
-                uploadImagePic(img1: image)
+                self.imgData = image
                 self.imgProfile.image = image
             }
         }
@@ -256,18 +262,26 @@ extension CreateProfileVC: UIImagePickerControllerDelegate, OpalImagePickerContr
         dismiss(animated: true, completion: nil)
     }
     
-    func addCreateData(address: String, oName:String,oType: String,educationLevel: String,skills: String, aboutMe:String, email:String, phone: String) {
+    func addCreateData(address: String, oName:String,oType: String,educationLevel: String,skills: String, aboutMe:String, email:String, phone: String, jobExp: String) {
         
         let ref = AppDelegate.shared.db.collection(jUser).document(uid)
-        ref.updateData([
-            jOrgAddress: address,
-            jOrgName : oName,
-            jOrgType: oType,
+        
+        var data = [
+            jJSAddress: address,
+            jJSLocation: address,
             jJSEduLevel: educationLevel,
             jSkills: skills,
-            jOrgImageURL : self.imageURL,
+            jJSImageURL : self.imageURL,
+            jJSExp: jobExp,
             jJSAboutMe : aboutMe,
-        ]){  err in
+            jOrgType : oType,
+            jOrgName : oName,
+            jOrgAddress : address,
+            jOrgLocation : address,
+            jOrgImageURL : self.imageURL
+        ]
+        
+        ref.updateData(data){  err in
             if let err = err {
                 print("Error adding document: \(err)")
             } else {

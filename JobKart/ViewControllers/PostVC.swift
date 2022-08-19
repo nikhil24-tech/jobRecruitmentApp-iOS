@@ -1,6 +1,5 @@
 //
 //  PostVC.swift
-//  JobKart
 
 
 import UIKit
