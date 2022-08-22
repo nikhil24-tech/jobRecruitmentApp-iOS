@@ -164,4 +164,10 @@ class JobCell: UITableViewCell {
         self.lblPhone.text = data.mobile.description
         self.lblAddress.text = data.orgAddress.description
     }
+    
+    func configCellApply(data: ApplyModel) {
+        self.lblName.text = data.empName.description
+        self.lblPhone.text = data.empPhone.description
+        self.lblAddress.text = data.address.description
+    }
 }
