@@ -21,6 +21,14 @@ class SavedJobVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 }
             }
         }
+        
+        cell.btnApply.addAction(for: .touchUpInside) {
+            if let vc = UIStoryboard.main.instantiateViewController(withClass: ApplyJobVC.self){
+                vc.modalPresentationStyle = .fullScreen
+                vc.jobData = data
+                self.navigationController?.present(vc, animated: true, completion: nil)
+            }
+        }
         return cell
     }
     
@@ -66,16 +74,15 @@ class SavedJobVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     if  let job_address: String = data1[jJobAddress] as? String,
                         let job_name: String = data1[jPostName] as? String,
                         let job_oType: String = data1[jJobOType] as? String,
-                        let job_email: String = data1[jJobEmail] as? String,
+                        //                        let job_email: String = data1[jJobEmail] as? String,
                         let address: String = data1[jAddress] as?  String,
                         let job_salary: String = data1[jJobSalary] as? String,
                         let description: String = data1[jDescription] as? String,
                         let requirement: String = data1[jRequirement] as? String,
-                        let user_email: String = data1[jUserEmail] as? String,
-                        let uid: String = data1[jUID] as? String,
-                        let favid: String = data1[jFavID] as? String
+                        let emp_email: String = data1[jUserEmail] as? String
+                            
                     {
-                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email: job_email, address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: user_email,uid: uid,favID: favid))
+                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email:  data1[jJobEmail] as? String ?? "", address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: emp_email,user_Phone: data1[jPhone] as? String ?? "",uid: data1[jUID] as? String ?? "",favID: ""))
                     }
                 }
                 

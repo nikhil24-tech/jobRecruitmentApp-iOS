@@ -11,33 +11,42 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if GFunction.user.userType == jEmp {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell", for: indexPath) as! SearchCell
-            let data = self.arrData[indexPath.row]
-            cell.configCell(data: data)
-            let tap = UITapGestureRecognizer()
-            tap.addAction {
-                if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
-                    vc.isSeeker =  GFunction.user.userType == jJSeeker
-                    vc.data = self.arrData[indexPath.row]
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }
-            }
-            
-            cell.vwMain.isUserInteractionEnabled = true
-            cell.vwMain.addGestureRecognizer(tap)
-            
-            cell.btnsave.addAction(for: .touchUpInside) {
-                self.isFav = false
-                Alert.shared.showAlert("JobCart", actionOkTitle: "Save", actionCancelTitle: "Cancel", message: "Are you sure you want to save this job?") { Bool in
-                    if Bool {
-                        self.checkAddToSave(data: data, email: GFunction.user.email)
+        if !GFunction.isAdmin {
+            if !(GFunction.user.userType == jEmp) {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell", for: indexPath) as! SearchCell
+                let data = self.arrData[indexPath.row]
+                cell.configCell(data: data)
+                let tap = UITapGestureRecognizer()
+                tap.addAction {
+                    if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
+                        vc.isSeeker =  false//GFunction.user.userType == jJSeeker
+                        vc.data = data
+                        self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }
+                
+                cell.vwMain.isUserInteractionEnabled = true
+                cell.vwMain.addGestureRecognizer(tap)
+                
+                cell.btnsave.addAction(for: .touchUpInside) {
+                    self.isFav = false
+                    Alert.shared.showAlert("JobCart", actionOkTitle: "Save", actionCancelTitle: "Cancel", message: "Are you sure you want to save this job?") { Bool in
+                        if Bool {
+                            self.checkAddToSave(data: data, email: GFunction.user.email)
+                        }
+                    }
+                }
+                
+                cell.btnApply.addAction(for: .touchUpInside) {
+                    if let vc = UIStoryboard.main.instantiateViewController(withClass: ApplyJobVC.self){
+                        vc.jobData = data
+                        vc.profileData = GFunction.userData
+                        self.navigationController?.present(vc, animated: true, completion: nil)
+                    }
+                }
+                
+                return cell
             }
-            
-            return cell
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchSeekerCell", for: indexPath) as! SearchSeekerCell
@@ -45,16 +54,18 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let tap = UITapGestureRecognizer()
         tap.addAction {
             if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
-                vc.isSeeker =  GFunction.user.userType == jJSeeker
+                vc.isSeeker =  true
                 vc.data = self.arrData[indexPath.row]
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }
-
+        
         cell.vwMain.isUserInteractionEnabled = true
         cell.vwMain.addGestureRecognizer(tap)
         
         return cell
+        
+        
     }
     
     
@@ -80,7 +91,7 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             } else {
                 print("Document added with ID: \(ref!.documentID)")
                 Alert.shared.showAlert(message: "Job has been added into Save list!!!") { (true) in
-                    UIApplication.shared.setEmp()
+                    UIApplication.shared.setSeeker()
                 }
             }
         }
@@ -122,7 +133,7 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        GFunction.user.userType == jEmp ? self.getEmpData() : self.getData()
+        
         
         self.vwSearch.layer.cornerRadius = 23.0
         
@@ -130,12 +141,11 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             textfield.attributedPlaceholder = NSAttributedString(string: textfield.placeholder ?? "", attributes: [NSAttributedString.Key.backgroundColor : UIColor.clear])
             textfield.backgroundColor = UIColor.hexStringToUIColor(hex: "#EFEEEE")
             textfield.borderStyle = .none
-            if GFunction.user.userType == jEmp {
-                self.getEmpData()
-                textfield.placeholder = "Designer"
-            }else {
+            if !GFunction.isAdmin {
+                GFunction.user.userType == jEmp ? self.getEmpData() : self.getData()
+                textfield.placeholder = GFunction.user.userType == jEmp ? "Designer" : "Job Title, Keywords, or Company"
+            }else{
                 self.getData()
-                textfield.placeholder = "Job Title, Keywords, or Company"
             }
             UITextField.appearance(whenContainedInInstancesOf: [type(of: sbBar)]).tintColor = .black
         }
@@ -147,7 +157,7 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     
     func getData() {
-        _ = AppDelegate.shared.db.collection(jJobs).whereField(jUID, isEqualTo: GFunction.user.docID).addSnapshotListener{ querySnapshot, error in
+        _ = AppDelegate.shared.db.collection(jJobs).addSnapshotListener{ querySnapshot, error in
             
             guard let snapshot = querySnapshot else {
                 print("Error fetching snapshots: \(error!)")
@@ -159,16 +169,17 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
                     let data1 = data.data()
                     if  let job_address: String = data1[jJobAddress] as? String,
                         let job_name: String = data1[jPostName] as? String,
-                        let job_oType: String = data1[jJobOType] as? String,
-                        let job_email: String = data1[jJobEmail] as? String,
-                        let address: String = data1[jAddress] as?  String,
+                        let job_oType: String = data1[jOrgType] as? String,
+                        //                        let job_email: String = data1[jJobEmail] as? String,
+                        let address: String = data1[jLocation] as?  String,
                         let job_salary: String = data1[jJobSalary] as? String,
-                        let description: String = data1[jDescription] as? String,
+                        let description: String = data1[jJobDescription] as? String,
                         let requirement: String = data1[jRequirement] as? String,
-                        let user_email: String = data1[jUserEmail] as? String,
-                        let uid: String = data1[jUID] as? String
+                        let emp_email: String = data1[jEmpEmail] as? String,
+                        let emp_Phone: String = data1[jPhone] as? String
+                            
                     {
-                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email: job_email, address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: user_email,uid: uid,favID: ""))
+                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email:  data1[jJobEmail] as? String ?? "", address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: emp_email,user_Phone: emp_Phone,uid: data1[jUID] as? String ?? "",favID: ""))
                     }
                 }
                 
@@ -196,17 +207,17 @@ class SearchVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
                     let data1 = data.data()
                     if  let job_address: String = data1[jJobAddress] as? String,
                         let job_name: String = data1[jPostName] as? String,
-                        let job_oType: String = data1[jJobOType] as? String,
-                        let job_email: String = data1[jJobEmail] as? String,
-                        let address: String = data1[jAddress] as?  String,
+                        let job_oType: String = data1[jOrgType] as? String,
+                        //                        let job_email: String = data1[jJobEmail] as? String,
+                        let address: String = data1[jLocation] as?  String,
                         let job_salary: String = data1[jJobSalary] as? String,
-                        let description: String = data1[jDescription] as? String,
+                        let description: String = data1[jJobDescription] as? String,
                         let requirement: String = data1[jRequirement] as? String,
-                        let user_email: String = data1[jUserEmail] as? String,
-                        let uid: String = data1[jUID] as? String
-                        
+                        let emp_email: String = data1[jEmpEmail] as? String,
+                        let emp_Phone: String = data1[jPhone] as? String
+                            
                     {
-                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email: job_email, address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: user_email,uid: uid,favID: ""))
+                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email:  data1[jJobEmail] as? String ?? "", address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: emp_email,user_Phone: emp_Phone,uid: data1[jUID] as? String ?? "",favID: ""))
                     }
                 }
                 
@@ -248,7 +259,7 @@ class SearchCell: UITableViewCell {
     func configCell(data: PostModel) {
         self.lblName.text = data.job_name.description
         self.lblAddress.text = data.job_address.description
-        self.btnHours.setTitle(data.job_salary, for: .normal)
+        self.btnHours.setTitle("$ \(data.job_salary) per hr", for: .normal)
         self.lblOName.text = data.job_oType.description
     }
 }
@@ -274,8 +285,15 @@ class SearchSeekerCell: UITableViewCell {
     func configCell(data: PostModel) {
         self.lblName.text = data.job_name.description
         self.lblAddress.text = data.job_address.description
-        self.btnHours.setTitle(data.job_salary, for: .normal)
+        self.btnHours.setTitle("$ \(data.job_salary) per hr", for: .normal)
         self.lblOName.text = data.job_oType.description
+    }
+    
+    func configCellApplied(data: ApplyModel) {
+        self.lblName.text = data.jobName.description
+        self.lblAddress.text = data.job_address.description
+        self.btnHours.setTitle("$ \(data.salary) per hr", for: .normal)
+        self.lblOName.text = data.jobOtype.description
     }
 }
 
