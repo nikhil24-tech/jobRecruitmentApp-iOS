@@ -123,7 +123,7 @@ class AdminCandidateVC: UIViewController, UITableViewDelegate, UITableViewDataSo
                         let userType: String = data1[jUserType] as? String,
                         let address: String = data1[jOrgAddress] as?  String,
                         let isBlock: Bool = data1[jIsBlock] as? Bool {
-                        self.array.append(UserDataModel(docID: uid, name: name, mobile: mobile, email: email, password: password, organizationType: orgType, userType: userType, orgAddress: address, orgName: data1[jOrgName] as? String ?? "" , eduLevel: data1[jJSEduLevel] as? String ?? "", skills: data1[jSkills] as? String ?? "", orgImageURL: data1[jOrgImageURL] as? String ?? "", aboutMe: data1[jJSAboutMe] as? String ?? "",isBlock: isBlock))
+                        self.array.append(UserDataModel(docID: uid, name: name, mobile: mobile, email: email, password: password, organizationType: orgType, userType: userType, orgAddress: address, orgName: data1[jOrgName] as? String ?? "" , eduLevel: data1[jJSEduLevel] as? String ?? "", skills: data1[jSkills] as? String ?? "", orgImageURL: data1[jOrgImageURL] as? String ?? "", aboutMe: data1[jJSAboutMe] as? String ?? "",isBlock: isBlock, exp: data1[jJSExp] as? String ?? ""))
                     }
                 }
                 self.tblList.delegate = self

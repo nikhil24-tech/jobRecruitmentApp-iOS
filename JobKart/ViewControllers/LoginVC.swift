@@ -78,13 +78,13 @@ extension LoginVC {
             }else{
                 let uid = FirebaseAuth.Auth.auth().currentUser?.uid ?? ""
                 
-                self?.loginUser(uid: uid, userType: userType)
+                self?.loginUser(uid: uid, userType: userType,password: password)
             }
         }
     }
     
     
-    func loginUser(uid: String,userType:String) {
+    func loginUser(uid: String,userType:String,password: String) {
         _ = AppDelegate.shared.db.collection(jUser).whereField(jUID, isEqualTo: uid).whereField(jUserType, isEqualTo: userType).addSnapshotListener{ querySnapshot, error in
             
             guard let snapshot = querySnapshot else {
@@ -94,13 +94,13 @@ extension LoginVC {
             
             if snapshot.documents.count != 0 {
                 let data1 = snapshot.documents[0].data()
-                if let name: String = data1[jName] as? String, let phone: String = data1[jPhone] as? String, let email: String = data1[jEmail] as? String, let password: String = data1[jPassword] as? String, let oType: String = data1[jOrgType] as? String, let uid: String = data1[jUID] as? String {
+                if let name: String = data1[jName] as? String, let phone: String = data1[jPhone] as? String, let email: String = data1[jEmail] as? String, let oType: String = data1[jOrgType] as? String, let uid: String = data1[jUID] as? String {
                     GFunction.user = UserModel(docID: uid, name: name, mobile: phone, email: email, password: password, organizationType: oType, userType: userType)
                     
                     if userType == jEmp {
-                        GFunction.userData = UserDataModel(docID: uid, name: name, mobile: phone, email: email, password: password, organizationType: oType, userType: userType, orgAddress: "", orgName: "", eduLevel: data1[jJSEduLevel] as? String ?? "", skills: data1[jSkills] as? String ?? "", orgImageURL: data1[jJSImageURL] as? String ?? "", aboutMe: data1[jJSAboutMe] as? String ?? "", isBlock: data1[jIsBlock] as? Bool ?? false)
+                        GFunction.userData = UserDataModel(docID: uid, name: name, mobile: phone, email: email, password: password, organizationType: oType, userType: userType, orgAddress: "", orgName: "", eduLevel: data1[jJSEduLevel] as? String ?? "", skills: data1[jSkills] as? String ?? "", orgImageURL: data1[jJSImageURL] as? String ?? "", aboutMe: data1[jJSAboutMe] as? String ?? "", isBlock: data1[jIsBlock] as? Bool ?? false, exp: data1[jJSExp] as? String ?? "")
                     }else{
-                        GFunction.userData = UserDataModel(docID: uid, name: name, mobile: phone, email: email, password: password, organizationType: oType, userType: userType, orgAddress: "", orgName: "", eduLevel: data1[jJSEduLevel] as? String ?? "", skills: data1[jSkills] as? String ?? "", orgImageURL: data1[jJSImageURL] as? String ?? "", aboutMe: data1[jJSAboutMe] as? String ?? "", isBlock: data1[jIsBlock] as? Bool ?? false)
+                        GFunction.userData = UserDataModel(docID: uid, name: name, mobile: phone, email: email, password: password, organizationType: oType, userType: userType, orgAddress: "", orgName: "", eduLevel: data1[jJSEduLevel] as? String ?? "", skills: data1[jSkills] as? String ?? "", orgImageURL: data1[jJSImageURL] as? String ?? "", aboutMe: data1[jJSAboutMe] as? String ?? "", isBlock: data1[jIsBlock] as? Bool ?? false, exp: data1[jJSExp] as? String ?? "")
                     }
                     
                     

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="mtB-VJ-vdc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="mtB-VJ-vdc">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -1116,7 +1117,7 @@ Employer</string>
                                                 <color key="textColor" red="0.066666666669999999" green="0.18039215689999999" blue="0.43529411759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Real Estate " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eLg-Ou-QmD">
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Real Estate " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eLg-Ou-QmD">
                                                 <rect key="frame" x="18" y="68" width="266" height="19.5"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                 <color key="textColor" red="0.066666666669999999" green="0.18039215689999999" blue="0.43529411759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1314,7 +1315,7 @@ Montreal, Canada</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oul-pY-1RI">
-                                <rect key="frame" x="0.0" y="146" width="414" height="750"/>
+                                <rect key="frame" x="0.0" y="212.5" width="414" height="683.5"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cio-NU-VwD">
                                         <rect key="frame" x="16" y="16" width="382" height="748.5"/>
@@ -1337,7 +1338,7 @@ Montreal, Canada</string>
                                                 <color key="textColor" red="0.066666666669999999" green="0.18039215689999999" blue="0.43529411759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Real Estate " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BEQ-FC-aKP">
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Real Estate " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BEQ-FC-aKP">
                                                 <rect key="frame" x="18" y="79.5" width="266" height="19.5"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                 <color key="textColor" red="0.066666666669999999" green="0.18039215689999999" blue="0.43529411759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1498,11 +1499,17 @@ Montreal, Canada</string>
                                     <constraint firstAttribute="bottom" secondItem="Cio-NU-VwD" secondAttribute="bottom" constant="50" id="zqW-db-mnj"/>
                                 </constraints>
                             </scrollView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are approved for the job." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UHl-Zb-KeX">
+                                <rect key="frame" x="20" y="166" width="374" height="26.5"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                <color key="textColor" red="0.066666666669999999" green="0.18039215689999999" blue="0.43529411759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="2bQ-a6-C3C"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Oul-pY-1RI" firstAttribute="top" secondItem="1ny-9x-wvB" secondAttribute="bottom" id="6up-RO-kV6"/>
+                            <constraint firstItem="Oul-pY-1RI" firstAttribute="top" secondItem="UHl-Zb-KeX" secondAttribute="bottom" constant="20" id="B00-59-ZrS"/>
                             <constraint firstItem="2bQ-a6-C3C" firstAttribute="trailing" secondItem="Oul-pY-1RI" secondAttribute="trailing" id="Hc9-zN-Hlh"/>
                             <constraint firstItem="Oul-pY-1RI" firstAttribute="leading" secondItem="2bQ-a6-C3C" secondAttribute="leading" id="Ohc-kp-OLT"/>
                             <constraint firstItem="cGO-ZJ-7z8" firstAttribute="centerX" secondItem="2bQ-a6-C3C" secondAttribute="centerX" id="PmM-1Y-0Dj"/>
@@ -1510,8 +1517,11 @@ Montreal, Canada</string>
                             <constraint firstItem="2bQ-a6-C3C" firstAttribute="trailing" secondItem="1ny-9x-wvB" secondAttribute="trailing" constant="22" id="eev-Mv-NFl"/>
                             <constraint firstItem="1ny-9x-wvB" firstAttribute="leading" secondItem="2bQ-a6-C3C" secondAttribute="leading" constant="22" id="gAV-Hz-nAf"/>
                             <constraint firstAttribute="bottom" secondItem="Oul-pY-1RI" secondAttribute="bottom" id="jMk-9K-0YN"/>
+                            <constraint firstItem="UHl-Zb-KeX" firstAttribute="leading" secondItem="2bQ-a6-C3C" secondAttribute="leading" constant="20" id="lpY-th-P9p"/>
                             <constraint firstItem="1ny-9x-wvB" firstAttribute="top" secondItem="cGO-ZJ-7z8" secondAttribute="bottom" constant="25" id="mGj-kj-DH5"/>
                             <constraint firstItem="Cio-NU-VwD" firstAttribute="centerX" secondItem="2bQ-a6-C3C" secondAttribute="centerX" id="qFI-4E-Swq"/>
+                            <constraint firstItem="UHl-Zb-KeX" firstAttribute="top" secondItem="1ny-9x-wvB" secondAttribute="bottom" constant="20" id="r4q-wY-EPy"/>
+                            <constraint firstItem="2bQ-a6-C3C" firstAttribute="trailing" secondItem="UHl-Zb-KeX" secondAttribute="trailing" constant="20" id="sqz-Mj-BD9"/>
                         </constraints>
                     </view>
                     <connections>
@@ -1521,6 +1531,7 @@ Montreal, Canada</string>
                         <outlet property="imgProfile" destination="rqx-Kx-4tJ" id="Y3t-ub-2Fi"/>
                         <outlet property="lblAddress" destination="40i-uk-TMy" id="cvX-th-TdF"/>
                         <outlet property="lblAddressInfo" destination="km0-kq-SuJ" id="x4V-Xn-Zsb"/>
+                        <outlet property="lblApplied" destination="UHl-Zb-KeX" id="8BF-3Y-N1G"/>
                         <outlet property="lblContactInfo" destination="VO4-Yr-7S2" id="9tO-68-oSf"/>
                         <outlet property="lblDescription" destination="Nih-L6-TkR" id="5hO-bf-dvY"/>
                         <outlet property="lblName" destination="Rbg-2Q-vEV" id="FwM-6X-JBY"/>
@@ -1984,6 +1995,7 @@ Montreal, Canada</string>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TRe-eZ-KMi" customClass="BlueThemeButton" customModule="JobKart" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="77" width="348" height="56"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <inset key="contentEdgeInsets" minX="0.0" minY="16" maxX="0.0" maxY="16"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Change Password"/>
@@ -2037,6 +2049,8 @@ Montreal, Canada</string>
                         <outlet property="btnChangePassword" destination="TRe-eZ-KMi" id="Waz-J6-MZC"/>
                         <outlet property="btnEditProfile" destination="Qrh-3I-7U3" id="k9k-x1-0lx"/>
                         <outlet property="btnSignOut" destination="eYu-5V-2Nn" id="QQg-bj-av1"/>
+                        <outlet property="txtNewPassword" destination="RUX-xL-1cd" id="cOc-jz-Ckq"/>
+                        <outlet property="txtOldPassword" destination="Iru-Sl-Daj" id="2qG-O1-JPI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QCZ-ks-CMH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -3026,7 +3040,7 @@ Montreal, Canada</string>
                                 <rect key="frame" x="0.0" y="155" width="414" height="697"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SaveJobCell" rowHeight="205" id="Skx-6J-Bjv" customClass="SaveJobCell" customModule="JobKart" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SavePostCell" rowHeight="205" id="Skx-6J-Bjv" customClass="SavePostCell" customModule="JobKart" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="44.5" width="414" height="205"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Skx-6J-Bjv" id="Rzb-ey-Rgg">
@@ -4170,6 +4184,7 @@ Montreal, Canada</string>
                         <outlet property="lblAboutme" destination="QM8-9v-yPa" id="jyv-CH-TE3"/>
                         <outlet property="lblAddress" destination="t74-QG-oMw" id="uHv-Wu-nhH"/>
                         <outlet property="lblEmail" destination="QoW-MR-tos" id="CLo-7H-Inm"/>
+                        <outlet property="lblExp" destination="iMg-xC-nYI" id="Atf-FG-AAh"/>
                         <outlet property="lblName" destination="8YF-fJ-IdS" id="D98-9B-cpV"/>
                         <outlet property="lblPhone" destination="kIX-7o-zmB" id="5SU-fG-10S"/>
                         <outlet property="lblSkills" destination="Bgy-M1-UfN" id="UqT-xY-luv"/>
@@ -4182,8 +4197,8 @@ Montreal, Canada</string>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="l03-T2-6er"/>
-        <segue reference="m3d-cI-5C2"/>
+        <segue reference="Yp3-9C-bme"/>
+        <segue reference="z8K-HA-6e0"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Add" width="62" height="40"/>

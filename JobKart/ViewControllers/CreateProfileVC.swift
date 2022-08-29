@@ -7,6 +7,7 @@
 
 import UIKit
 
+@available(iOS 15.0.0, *)
 class CreateProfileVC: UIViewController, UINavigationControllerDelegate {
 
     @IBOutlet weak var txtOName: UITextField!
@@ -30,6 +31,8 @@ class CreateProfileVC: UIViewController, UINavigationControllerDelegate {
     var email: String = ""
     var phone: String = ""
     var uid: String = ""
+    var selectedLocation = CLLocationCoordinate2D()
+    var address = ""
     
     func setUp() {
         if index == 1 {
@@ -94,6 +97,7 @@ class CreateProfileVC: UIViewController, UINavigationControllerDelegate {
         self.txtEmail.text = self.email
         self.txtPhone.text = self.phone
         self.setUp()
+        self.txtAddress.delegate = self
 
         self.imgProfile.layer.cornerRadius = self.imgProfile.frame.height/2
         let tap = UITapGestureRecognizer()
@@ -199,6 +203,7 @@ class CreateProfileVC: UIViewController, UINavigationControllerDelegate {
 
 
 //MARK:- UIImagePickerController Delegate Methods
+@available(iOS 15.0.0, *)
 extension CreateProfileVC: UIImagePickerControllerDelegate, OpalImagePickerControllerDelegate {
     func uploadImagePic(img1 :UIImage,address: String, oName:String,oType: String,educationLevel: String,skills: String, aboutMe:String, email:String, phone: String, jobExp: String){
         let data = img1.jpegData(compressionQuality: 0.8)! as NSData
@@ -292,4 +297,94 @@ extension CreateProfileVC: UIImagePickerControllerDelegate, OpalImagePickerContr
             }
         }
     }
+}
+
+@available(iOS 15.0.0, *)
+extension CreateProfileVC: UITextFieldDelegate {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField == self.txtAddress {
+            self.autocompleteClicked(textField)
+            return false
+        }
+        return true
+    }
+}
+
+@available(iOS 15.0.0, *)
+extension CreateProfileVC: GMSAutocompleteViewControllerDelegate {
+    
+    // Present the Autocomplete view controller when the button is pressed.
+    @objc func autocompleteClicked(_ sender: UITextField) {
+        let autocompleteController = GMSAutocompleteViewController()
+        autocompleteController.delegate = self
+        
+        // Specify the place data types to return.
+        let fields: GMSPlaceField = GMSPlaceField(rawValue: UInt(GMSPlaceField.name.rawValue) |
+                                                  UInt(GMSPlaceField.placeID.rawValue) | UInt(GMSPlaceField.coordinate.rawValue))
+        autocompleteController.placeFields = fields
+        
+        // Specify a filter.
+        let filter = GMSAutocompleteFilter()
+        filter.type = .address
+        autocompleteController.autocompleteFilter = filter
+        
+        // Display the autocomplete view controller.
+        present(autocompleteController, animated: true, completion: nil)
+    }
+    
+    // Handle the user's selection.
+    func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
+        self.selectedLocation = place.coordinate
+        self.getLocationAddressFromLatLong(position: self.selectedLocation)
+        //self.mapView.camera = camera
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
+        // TODO: handle the error.
+        print("Error: ", error.localizedDescription)
+    }
+    
+    // User canceled the operation.
+    func wasCancelled(_ viewController: GMSAutocompleteViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // Turn the network activity indicator on and off again.
+    func didRequestAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    }
+    
+    func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    }
+    
+    func getLocationAddressFromLatLong(position: CLLocationCoordinate2D) {
+        let geocoder = GMSGeocoder()
+        geocoder.reverseGeocodeCoordinate(position) { response, error in
+            //
+            if error != nil {
+                print("reverse geodcode fail: \(error!.localizedDescription)")
+            } else {
+                if let places = response?.results() {
+                    if let place = places.first {
+                        
+                        
+                        if let lines = place.lines {
+                            print("GEOCODE: Formatted Address: \(lines)")
+                            self.address = lines.joined(separator: ", ")
+                            
+                            self.txtAddress.text = self.address
+                        }
+                        
+                    } else {
+                        print("GEOCODE: nil first in places")
+                    }
+                } else {
+                    print("GEOCODE: nil in places")
+                }
+            }
+        }
+    }
+    
 }

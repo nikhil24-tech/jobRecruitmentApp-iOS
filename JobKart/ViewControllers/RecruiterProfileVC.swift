@@ -40,6 +40,14 @@ class RecruiterProfileVC: UIViewController {
             self.btnBlock.layer.cornerRadius = self.btnBlock.frame.height/2
             self.btnUnBlock.layer.cornerRadius = self.btnUnBlock.frame.height/2
         }
+        
+        if data != nil {
+            self.lblName.text = data.name.description
+            self.lblAddress.text = data.orgAddress.description
+            self.lblContactInfo.text  = "Email: \(data.email.description)\nMobile: \(data.mobile.description)"
+            self.lblAddressInfo.text = data.orgAddress.description
+            
+        }
         // Do any additional setup after loading the view.
     }
     

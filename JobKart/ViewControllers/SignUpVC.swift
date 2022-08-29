@@ -144,12 +144,16 @@ extension SignUpVC {
             } else {
                 GFunction.user = UserModel(docID: uid, name: name,  mobile: mobile, email: email, password: password, organizationType: organizationType,userType: usertType)
                     
-                if let vc = UIStoryboard.main.instantiateViewController(withClass: CreateProfileVC.self){
-                    vc.index = self.index
-                    vc.email = email
-                    vc.phone = mobile
-                    vc.uid = uid
-                    self.navigationController?.pushViewController(vc, animated: true)
+                if #available(iOS 15.0.0, *) {
+                    if let vc = UIStoryboard.main.instantiateViewController(withClass: CreateProfileVC.self){
+                        vc.index = self.index
+                        vc.email = email
+                        vc.phone = mobile
+                        vc.uid = uid
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
+                } else {
+                    // Fallback on earlier versions
                 }
                 self.flag = true
             }
