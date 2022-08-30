@@ -118,8 +118,8 @@ class AcceptRejectVC: UIViewController {
     }
     
     func sendEmail(email: String, name:String, completion: @escaping (Result<Void,Error>) -> Void) {
-        let apikey = "" ///SG API KEY
-        let devemail = "" //DEV ACCOUNT EMAIL ID
+        let apikey = "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" ///SG API KEY
+        let devemail = "jobkart7722@gmail.com" //DEV ACCOUNT EMAIL ID
         
         let data : [String:String] = [
             "email": email,
