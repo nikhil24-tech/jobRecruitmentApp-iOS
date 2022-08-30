@@ -21,11 +21,21 @@ class SavedJobVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 }
             }
         }
+        
+        cell.btnApply.addAction(for: .touchUpInside) {
+            if let vc = UIStoryboard.main.instantiateViewController(withClass: ApplyJobVC.self){
+                vc.modalPresentationStyle = .fullScreen
+                self.navigationController?.present(vc, animated: true, completion: nil)
+            }
+        }
+        
+        
+        cell.btnApply.isHidden = true
         return cell
     }
     
     
-    func removeFromPost(data: PostModel){
+    func removeFromPost(data: SavedPostModel){
         let ref = AppDelegate.shared.db.collection(jJobSave).document(data.docID)
         ref.delete(){ err in
             if let err = err {
@@ -40,7 +50,7 @@ class SavedJobVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tblList: UITableView!
     
-    var array = [PostModel]()
+    var array = [SavedPostModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,19 +73,29 @@ class SavedJobVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             if snapshot.documents.count != 0 {
                 for data in snapshot.documents {
                     let data1 = data.data()
-                    if  let job_address: String = data1[jJobAddress] as? String,
-                        let job_name: String = data1[jPostName] as? String,
-                        let job_oType: String = data1[jJobOType] as? String,
-                        let job_email: String = data1[jJobEmail] as? String,
-                        let address: String = data1[jAddress] as?  String,
-                        let job_salary: String = data1[jJobSalary] as? String,
-                        let description: String = data1[jDescription] as? String,
-                        let requirement: String = data1[jRequirement] as? String,
-                        let user_email: String = data1[jUserEmail] as? String,
-                        let uid: String = data1[jUID] as? String,
-                        let favid: String = data1[jFavID] as? String
+                    if  let jEmpEmail: String = data1[jEmpEmail] as? String,
+                        let jPhone: String = data1[jPhone] as? String,
+                        let jIsApproved: Bool = data1[jIsApproved] as? Bool,
+                        let jJobDescription: String = data1[jJobDescription] as?  String,
+                        let jJobID: String = data1[jJobID] as? String,
+                        let jLocation: String = data1[jLocation] as? String,
+                        let jPostName: String = data1[jPostName] as? String,
+                        let jJSAboutMe: String = data1[jJSAboutMe] as? String,
+                        let jJSAddress: String = data1[jJSAddress] as? String,
+                        let jsEmail: String = data1[jsEmail] as? String,
+                        let jJSExp: String = data1[jJSExp] as? String,
+                        let jJSImageURL: String = data1[jJSImageURL] as? String,
+                        let jJSPhone: String = data1[jJSPhone] as? String,
+                        let jSkills: String = data1[jSkills] as? String,
+                        let jJSName: String = data1[jJSName] as? String,
+                        let jOrgAddress: String = data1[jOrgAddress] as? String,
+                        let jOrgType: String = data1[jOrgType] as? String,
+                        let jJobSalary: String = data1[jJobSalary] as? String,
+                        let jRequirement: String = data1[jRequirement] as? String,
+                        let uid: String = data1[jUID] as? String
                     {
-                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email: job_email, address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: user_email,uid: uid,favID: favid))
+                    
+                    self.array.append(SavedPostModel(docId: data.documentID, jEmpEmail: jEmpEmail, jPhone: jPhone, jIsApproved: jIsApproved, jJobDescription: jJobDescription, jJobID: jJobID, jLocation: jLocation, jPostName: jPostName, jJSAboutMe: jJSAboutMe, jJSAddress: jJSAddress, jsEmail: jsEmail, jJSExp: jJSExp, jJSImageURL: jJSImageURL, jJSName: jJSName, jJSPhone: jJSPhone, jSkills: jSkills, jOrgAddress: jOrgAddress, jOrgType: jOrgType, jJobSalary: jJobSalary, jRequirement: jRequirement, uid: uid))
                     }
                 }
                 
@@ -83,6 +103,7 @@ class SavedJobVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 self.tblList.dataSource = self
                 self.tblList.reloadData()
             }else{
+                self.tblList.reloadData()
                 Alert.shared.showAlert(message: "No Data Found !!!", completion: nil)
             }
         }
@@ -92,6 +113,34 @@ class SavedJobVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
 
 class SaveJobCell: UITableViewCell {
+    @IBOutlet weak var vwMain: UIView!
+    @IBOutlet weak var lblName: UILabel!
+    @IBOutlet weak var lblOName: UILabel!
+    @IBOutlet weak var lblAddress: UILabel!
+    @IBOutlet weak var btnHours: UIButton!
+    @IBOutlet weak var btnApply: UIButton!
+    @IBOutlet weak var btnUnsaved: UIButton!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.vwMain.layer.cornerRadius = 23.0
+        DispatchQueue.main.async {
+            self.btnApply.layer.cornerRadius = self.btnApply.frame.height/2
+            self.btnHours.layer.cornerRadius = self.btnHours.frame.height/2
+            self.btnUnsaved.layer.cornerRadius = self.btnUnsaved.frame.height/2
+        }
+    }
+    
+    func configCell(data: SavedPostModel) {
+        self.lblName.text = data.jPostName.description
+        self.lblAddress.text = data.jOrgAddress.description
+        self.btnHours.setTitle("$\(data.jJobSalary.description) an hour", for: .normal)
+        self.lblOName.text = data.jOrgType.description
+    }
+}
+
+
+class SavePostCell: UITableViewCell {
     @IBOutlet weak var vwMain: UIView!
     @IBOutlet weak var lblName: UILabel!
     @IBOutlet weak var lblOName: UILabel!

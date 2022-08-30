@@ -60,7 +60,7 @@ class ApplyJobVC: UIViewController {
                         let userType: String = data1[jUserType] as? String,
                         let address: String = data1[jOrgAddress] as?  String,
                         let isBlock: Bool = data1[jIsBlock] as? Bool {
-                        self.profileData = UserDataModel(docID: uid, name: name, mobile: mobile, email: email, password: password, organizationType: orgType, userType: userType, orgAddress: address, orgName: data1[jOrgName] as? String ?? "" , eduLevel: data1[jJSEduLevel] as? String ?? "", skills: data1[jSkills] as? String ?? "", orgImageURL: data1[jOrgImageURL] as? String ?? "", aboutMe: data1[jJSAboutMe] as? String ?? "",isBlock: isBlock)
+                        self.profileData = UserDataModel(docID: uid, name: name, mobile: mobile, email: email, password: password, organizationType: orgType, userType: userType, orgAddress: address, orgName: data1[jOrgName] as? String ?? "" , eduLevel: data1[jJSEduLevel] as? String ?? "", skills: data1[jSkills] as? String ?? "", orgImageURL: data1[jOrgImageURL] as? String ?? "", aboutMe: data1[jJSAboutMe] as? String ?? "",isBlock: isBlock, exp: data1[jJSExp] as? String ?? "")
                     }
                 }
             }
@@ -71,6 +71,7 @@ class ApplyJobVC: UIViewController {
         var ref : DocumentReference? = nil
         ref = AppDelegate.shared.db.collection(jApplyJobs).addDocument(data:
                                                                         [
+                                                                            jJobDescription: data.description,
                                                                             jJobAddress: data.job_address,
                                                                             jPostName : data.job_name,
                                                                             jJobOType: data.job_oType,
@@ -85,8 +86,11 @@ class ApplyJobVC: UIViewController {
                                                                             jPhone: user.mobile,
                                                                             jJSAboutMe: user.aboutMe,
                                                                             jSkills: user.skills,
+                                                                            jsEmail: user.email,
+                                                                            jJSExp: user.exp,
                                                                             jIsApproved: false,
-                                                                            jIsRejected: false
+                                                                            jIsRejected: false,
+                                                                            jJobID: data.docID
                                                                         ])
         {  err in
             if let err = err {

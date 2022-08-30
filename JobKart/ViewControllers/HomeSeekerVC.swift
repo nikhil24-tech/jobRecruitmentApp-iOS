@@ -1,36 +1,40 @@
 //
-//  AdminHomeVC.swift
+//  HomeSeekerVC.swift
 //  JobKart
 
 
 import UIKit
 
-class AdminHomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
-    @IBOutlet weak var tblJobList: UITableView!
-    
-    var arrData = [PostModel]()
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.getData()
-        // Do any additional setup after loading the view.
-    }
-    
+class HomeSeekerVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.arrData.count
+        self.array.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchSeekerCell", for: indexPath) as! SearchSeekerCell
-        cell.configCell(data: self.arrData[indexPath.row])
+        let data = self.array[indexPath.row]
+        cell.configCell(data: data)
         let tap = UITapGestureRecognizer()
         tap.addAction {
-            if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
-                vc.isFromAdmin =  true
-                vc.data = self.arrData[indexPath.row]
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
+//            if GFunction.user.userType == jJSeeker {
+//                if (data.saveAndApply[0][isApplied]) as! Int == 0 {
+//                    if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
+//                        vc.isSeeker =  true
+//                        vc.data = data
+//                        self.navigationController?.pushViewController(vc, animated: true)
+//                    }
+//                }else{
+//                    Alert.shared.showAlert(message: "This job is no longer available", completion: nil)
+//                }
+//            }else{
+                if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
+                    vc.isSeeker =  true
+                    vc.data = data
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+//            }
+            
+            
         }
         
         cell.vwMain.isUserInteractionEnabled = true
@@ -39,6 +43,21 @@ class AdminHomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
         return cell
     }
     
+
+    @IBOutlet weak var tblList: UITableView!
+    
+    var array = [PostModel]()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.getData()
+
+        // Do any additional setup after loading the view.
+    }
+    
+    
+    
     func getData() {
         _ = AppDelegate.shared.db.collection(jJobs).addSnapshotListener{ querySnapshot, error in
             
@@ -46,7 +65,7 @@ class AdminHomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
                 print("Error fetching snapshots: \(error!)")
                 return
             }
-            self.arrData.removeAll()
+            self.array.removeAll()
             if snapshot.documents.count != 0 {
                 for data in snapshot.documents {
                     let data1 = data.data()
@@ -61,18 +80,16 @@ class AdminHomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
                         let emp_email: String = data1[jEmpEmail] as? String,
                         let emp_Phone: String = data1[jPhone] as? String,
                         let saveAndApply = data1[jsSavedAndApplied] as? [[String:Any]]
-                            
                     {
-                    self.arrData.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email:  data1[jJobEmail] as? String ?? "", address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: emp_email,user_Phone: emp_Phone,uid: data1[jUID] as? String ?? "",favID: "",saveAndApply: saveAndApply))
+                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email:  data1[jJobEmail] as? String ?? "", address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: emp_email,user_Phone: emp_Phone,uid: data1[jUID] as? String ?? "",favID: "",saveAndApply: saveAndApply))
                     }
                 }
-                self.tblJobList.delegate = self
-                self.tblJobList.dataSource = self
-                self.tblJobList.reloadData()
+                self.tblList.delegate = self
+                self.tblList.dataSource = self
+                self.tblList.reloadData()
             }else{
                 Alert.shared.showAlert(message: "No Data Found !!!", completion: nil)
             }
         }
     }
-
 }

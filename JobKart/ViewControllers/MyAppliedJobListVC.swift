@@ -13,18 +13,16 @@ class MyAppliedJobListVC: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchSeekerCell", for: indexPath) as! SearchSeekerCell
         cell.configCellApplied(data: self.array[indexPath.row])
-//        let tap = UITapGestureRecognizer()
-//        tap.addAction {
-//            if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
-//                vc.isSeeker =  true
-//                vc.data = self.array[indexPath.row]
-//                self.navigationController?.pushViewController(vc, animated: true)
-//            }
-//        }
-//
-//        cell.vwMain.isUserInteractionEnabled = true
-//        cell.vwMain.addGestureRecognizer(tap)
         
+        let tap = UITapGestureRecognizer()
+        tap.addAction {
+            if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
+                vc.applyData = self.array[indexPath.row]
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+        cell.vwMain.addGestureRecognizer(tap)
+        cell.vwMain.isUserInteractionEnabled = true
         return cell
     }
     
@@ -66,8 +64,10 @@ class MyAppliedJobListVC: UIViewController, UITableViewDataSource, UITableViewDe
                         let salary: String = data1[jJobSalary] as?  String,
                         let uid: String = data1[jUID] as? String,
                         let aboutMe: String = data1[jJSAboutMe] as? String,
-                        let skills: String = data1[jSkills] as? String {
-                        self.array.append(ApplyModel(docId: data.documentID, empName: name, empPhone: mobile, empEmail: data1[jEmpEmail] as? String ?? "", isApproved: isAccept, isRejected: isReject, jobName: jobname, jobRequirements: requirements, jobOtype: jJobOrgType, job_aboutme: aboutMe, job_Skills: skills, salary: salary, address: address, job_address: job_address, uid: uid))
+                        let skills: String = data1[jSkills] as? String,
+                        let jobID: String = data1[jJobID] as? String,
+                        let jobDescription: String = data1[jJobDescription] as? String {
+                        self.array.append(ApplyModel(docId: data.documentID, empName: name, empPhone: mobile, empEmail: data1[jEmpEmail] as? String ?? "", isApproved: isAccept, isRejected: isReject, jobName: jobname, jobRequirements: requirements, jobOtype: jJobOrgType, job_aboutme: aboutMe, job_Skills: skills, salary: salary, address: address, job_address: job_address, uid: uid, jobID: jobID,jobDescription: jobDescription, exp: data1[jJSExp] as? String ?? ""))
                     }
                 }
                 

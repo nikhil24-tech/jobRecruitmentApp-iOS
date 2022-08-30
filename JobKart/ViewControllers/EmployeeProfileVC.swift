@@ -36,6 +36,17 @@ class EmployeeProfileVC: UIViewController {
             self.btnBlock.layer.cornerRadius = self.btnBlock.frame.height/2
             self.btnUnBlock.layer.cornerRadius = self.btnUnBlock.frame.height/2
         }
+        
+        if data != nil {
+            self.lblName.text = data.name.description
+            self.lblAddress.text = data.orgAddress.description
+            self.lblEmail.text  = data.email.description
+            self.lblPhone.text =  data.mobile.description
+            self.lblSkills.text = data.skills.description
+            self.lblAboutMe.text = data.aboutMe.description
+            self.lblExp.text = data.eduLevel.description
+            
+        }
         // Do any additional setup after loading the view.
     }
     
@@ -48,7 +59,8 @@ class EmployeeProfileVC: UIViewController {
             if let err = err {
                 print("Error adding document: \(err)")
             } else {
-                self.navigationController?.popViewController(animated: true)
+                UIApplication.shared.setAdmin()
+//                self.navigationController?.popViewController(animated: true)
             }
         }
     }
