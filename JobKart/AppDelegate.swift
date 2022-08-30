@@ -9,6 +9,10 @@ import UIKit
 @_exported import FirebaseCore
 @_exported import Photos
 @_exported import OpalImagePicker
+@_exported import GoogleMaps
+@_exported import GooglePlaces
+@_exported import SendGrid
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,6 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        GMSServices.provideAPIKey("AIzaSyAtE3XUkS_CIw8lTVu-8bZXi_LtsvmO4jc")
+        GMSPlacesClient.provideAPIKey("AIzaSyAtE3XUkS_CIw8lTVu-8bZXi_LtsvmO4jc")
+    
         FirebaseApp.configure()
         db = Firestore.firestore()
         let settings = db.settings
