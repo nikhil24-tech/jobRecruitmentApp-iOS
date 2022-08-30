@@ -12,14 +12,29 @@ class HomeSeekerVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchSeekerCell", for: indexPath) as! SearchSeekerCell
-        cell.configCell(data: self.array[indexPath.row])
+        let data = self.array[indexPath.row]
+        cell.configCell(data: data)
         let tap = UITapGestureRecognizer()
         tap.addAction {
-            if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
-                vc.isSeeker =  true
-                vc.data = self.array[indexPath.row]
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
+//            if GFunction.user.userType == jJSeeker {
+//                if (data.saveAndApply[0][isApplied]) as! Int == 0 {
+//                    if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
+//                        vc.isSeeker =  true
+//                        vc.data = data
+//                        self.navigationController?.pushViewController(vc, animated: true)
+//                    }
+//                }else{
+//                    Alert.shared.showAlert(message: "This job is no longer available", completion: nil)
+//                }
+//            }else{
+                if let vc = UIStoryboard.main.instantiateViewController(withClass: JobDetailsVC.self){
+                    vc.isSeeker =  true
+                    vc.data = data
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+//            }
+            
+            
         }
         
         cell.vwMain.isUserInteractionEnabled = true
@@ -63,10 +78,10 @@ class HomeSeekerVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                         let description: String = data1[jJobDescription] as? String,
                         let requirement: String = data1[jRequirement] as? String,
                         let emp_email: String = data1[jEmpEmail] as? String,
-                        let emp_Phone: String = data1[jPhone] as? String
-                            
+                        let emp_Phone: String = data1[jPhone] as? String,
+                        let saveAndApply = data1[jsSavedAndApplied] as? [[String:Any]]
                     {
-                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email:  data1[jJobEmail] as? String ?? "", address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: emp_email,user_Phone: emp_Phone,uid: data1[jUID] as? String ?? "",favID: ""))
+                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email:  data1[jJobEmail] as? String ?? "", address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: emp_email,user_Phone: emp_Phone,uid: data1[jUID] as? String ?? "",favID: "",saveAndApply: saveAndApply))
                     }
                 }
                 self.tblList.delegate = self
