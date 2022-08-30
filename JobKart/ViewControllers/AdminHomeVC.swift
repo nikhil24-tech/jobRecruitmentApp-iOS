@@ -59,10 +59,11 @@ class AdminHomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource 
                         let description: String = data1[jJobDescription] as? String,
                         let requirement: String = data1[jRequirement] as? String,
                         let emp_email: String = data1[jEmpEmail] as? String,
-                        let emp_Phone: String = data1[jPhone] as? String
+                        let emp_Phone: String = data1[jPhone] as? String,
+                        let saveAndApply = data1[jsSavedAndApplied] as? [[String:Any]]
                             
                     {
-                    self.arrData.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email:  data1[jJobEmail] as? String ?? "", address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: emp_email,user_Phone: emp_Phone,uid: data1[jUID] as? String ?? "",favID: ""))
+                    self.arrData.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email:  data1[jJobEmail] as? String ?? "", address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: emp_email,user_Phone: emp_Phone,uid: data1[jUID] as? String ?? "",favID: "",saveAndApply: saveAndApply))
                     }
                 }
                 self.tblJobList.delegate = self

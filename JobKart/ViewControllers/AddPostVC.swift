@@ -90,6 +90,11 @@ class AddPostVC: UIViewController {
     
     func addCreateData(name: String, oAddress:String, email:String, Otype:String, address:String, salary:String ,description:String, requirement:String, user_Email: String, phone: String) {
         var ref : DocumentReference? = nil
+        let data = [
+            [isApplied: false,
+            isSaved: false,
+            jsEmail : GFunction.user.email]
+        ]
         ref = AppDelegate.shared.db.collection(jJobs).addDocument(data:
                                                                             [
                                                                                 jJobAddress: oAddress,
@@ -102,7 +107,8 @@ class AddPostVC: UIViewController {
                                                                                 jRequirement : requirement,
                                                                                 jEmpEmail : user_Email,
                                                                                 jPhone : phone,
-                                                                                jUID: GFunction.user.docID
+                                                                                jUID: GFunction.user.docID,
+                                                                                jsSavedAndApplied: data
                                                                             ])
         {  err in
             if let err = err {

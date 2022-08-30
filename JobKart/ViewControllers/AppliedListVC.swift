@@ -1,5 +1,6 @@
 //
 //  AppliedListVC.swift
+//  JobKart
 
 
 import UIKit
@@ -56,18 +57,20 @@ class AppliedListVC: UIViewController, UITableViewDataSource, UITableViewDelegat
                     if  let job_address: String = data1[jJobAddress] as? String,
                         let name: String = data1[jName] as? String,
                         let mobile: String = data1[jPhone] as? String,
-                        let empEmail: String = data1[jEmpEmail] as? String,
                         let jobname: String = data1[jPostName] as? String,
                         let address: String = data1[jAddress] as?  String,
                         let isReject: Bool = data1[jIsRejected] as? Bool,
                         let isAccept: Bool = data1[jIsApproved] as? Bool,
                         let requirements: String = data1[jRequirement] as?  String,
-                        let oType: String = data1[jOrgType] as?  String,
+                        let oType: String = data1[jJobOType] as?  String,
                         let salary: String = data1[jJobSalary] as?  String,
                         let uid: String = data1[jUID] as? String,
                         let aboutMe: String = data1[jJSAboutMe] as? String,
-                        let skills: String = data1[jSkills] as? String {
-                        self.array.append(ApplyModel(docId: data.documentID, empName: name, empPhone: mobile, empEmail: empEmail, isApproved: isAccept, isRejected: isReject, jobName: jobname, jobRequirements: requirements, jobOtype: oType, job_aboutme: aboutMe, job_Skills: skills, salary: salary, address: address, job_address: job_address, uid: uid))
+                        let skills: String = data1[jSkills] as? String,
+                        let jobID: String = data1[jJobID] as? String,
+                        let jobDescription: String = data1[jJobDescription] as? String
+                    {
+                    self.array.append(ApplyModel(docId: data.documentID, empName: name, empPhone: mobile, empEmail: data1[jsEmail] as? String ?? "", isApproved: isAccept, isRejected: isReject, jobName: jobname, jobRequirements: requirements, jobOtype: oType, job_aboutme: aboutMe, job_Skills: skills, salary: salary, address: address, job_address: job_address, uid: uid,jobID: jobID,jobDescription: jobDescription, exp: data1[jJSExp] as? String ?? ""))
                     }
                 }
                 

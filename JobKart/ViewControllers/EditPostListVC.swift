@@ -11,7 +11,7 @@ class EditPostListVC: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SaveJobCell", for: indexPath) as! SaveJobCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SavePostCell", for: indexPath) as! SavePostCell
         let data = self.array[indexPath.row]
         cell.configCell(data: data)
         cell.btnUnsaved.setTitle("Delete Job", for: .normal)
@@ -24,7 +24,11 @@ class EditPostListVC: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         }
         cell.btnApply.addAction(for: .touchUpInside) {
-            Alert.shared.showAlert(message: "UNDER DEVELOPMENT ", completion: nil)
+            if let vc = UIStoryboard.main.instantiateViewController(withClass: AddPostVC.self) {
+                vc.isEdit = true
+                vc.data = data
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
         return cell
     }
@@ -54,16 +58,17 @@ class EditPostListVC: UIViewController, UITableViewDelegate, UITableViewDataSour
                     let data1 = data.data()
                     if  let job_address: String = data1[jJobAddress] as? String,
                         let job_name: String = data1[jPostName] as? String,
-                        let job_oType: String = data1[jJobOType] as? String,
-                        let job_email: String = data1[jJobEmail] as? String,
-                        let address: String = data1[jAddress] as?  String,
+                        let job_oType: String = data1[jOrgType] as? String,
+                        //                        let job_email: String = data1[jJobEmail] as? String,
+                        let address: String = data1[jLocation] as?  String,
                         let job_salary: String = data1[jJobSalary] as? String,
-                        let description: String = data1[jDescription] as? String,
+                        let description: String = data1[jJobDescription] as? String,
                         let requirement: String = data1[jRequirement] as? String,
-                        let user_email: String = data1[jUserEmail] as? String,
-                        let uid: String = data1[jUID] as? String
+                        let emp_email: String = data1[jEmpEmail] as? String,
+                        let emp_Phone: String = data1[jPhone] as? String,
+                        let saveAndApply = data1[jsSavedAndApplied] as? [[String:Any]]
                     {
-                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email: job_email, address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: user_email,uid: uid,favID: ""))
+                    self.array.append(PostModel(docId: data.documentID, job_address: job_address, job_name: job_name, job_oType: job_oType, job_email:  data1[jJobEmail] as? String ?? "", address: address, job_salary: job_salary, description: description, requirement: requirement, user_email: emp_email,user_Phone: emp_Phone,uid: data1[jUID] as? String ?? "",favID: "", saveAndApply: saveAndApply))
                     }
                 }
                 self.tblLsit.delegate = self
