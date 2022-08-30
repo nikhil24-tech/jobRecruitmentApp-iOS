@@ -12,6 +12,7 @@ class JobDetailsVC: UIViewController {
     @IBOutlet weak var lblOName: UILabel!
     @IBOutlet weak var lblRole: UILabel!
     @IBOutlet weak var lblAddress: UILabel!
+    @IBOutlet weak var lblApplied: UILabel!
     @IBOutlet weak var btnHours: UIButton!
     @IBOutlet weak var lblDescription: UILabel!
     @IBOutlet weak var lblRequirement: UILabel!
@@ -24,6 +25,7 @@ class JobDetailsVC: UIViewController {
     var isFromAdmin: Bool = false
     var isFav : Bool = true
     var data: PostModel!
+    var applyData: ApplyModel!
     
     
     @IBAction func btnClick(_ sender: UIButton) {
@@ -53,6 +55,8 @@ class JobDetailsVC: UIViewController {
         self.btnSaveJob.isHidden =  isSeeker
         self.btnApplyJob.isHidden = isSeeker
         
+        
+        self.lblApplied.isHidden = true
         if self.isFromAdmin {
             self.btnSaveJob.isHidden = !isFromAdmin
             self.btnApplyJob.isHidden = isFromAdmin
@@ -76,23 +80,86 @@ class JobDetailsVC: UIViewController {
             self.lblRequirement.text = data.requirement.description
             self.btnHours.setTitle(data.job_salary.description, for: .normal)
         }
+        
+        if applyData != nil {
+            self.lblName.text = applyData.jobName.description
+            self.lblOName.text = applyData.jobOtype.description
+            self.lblAddress.text = applyData.address.description
+            self.getJobData(uid: applyData.jobID)
+            self.lblAddressInfo.text = applyData.job_address.description
+            self.lblContactInfo.text = applyData.empPhone.description
+            self.lblRequirement.text = applyData.jobRequirements.description
+            self.btnHours.setTitle(applyData.salary.description, for: .normal)
+            
+            if applyData.isApproved {
+                self.btnSaveJob.isUserInteractionEnabled = false
+                self.btnApplyJob.isUserInteractionEnabled = false
+                self.btnSaveJob.backgroundColor = UIColor.lightGray
+                self.btnApplyJob.backgroundColor = UIColor.lightGray
+                self.lblApplied.isHidden = false
+            }
+        }
         // Do any additional setup after loading the view.
     }
     
-    func savejobs(data: PostModel, email:String) {
+    func getData(uid: String) {
+        _ = AppDelegate.shared.db.collection(jUser).whereField(jUID, isEqualTo: uid).addSnapshotListener{ querySnapshot, error in
+            
+            guard let snapshot = querySnapshot else {
+                print("Error fetching snapshots: \(error!)")
+                return
+            }
+            
+            if snapshot.documents.count != 0 {
+                let data1 = snapshot.documents[0].data()
+                if let name: String = data1[jName] as? String, let phone: String = data1[jPhone] as? String, let email: String = data1[jEmail] as? String, let oType: String = data1[jOrgType] as? String, let address: String = data1[jOrgAddress] as? String, let imageURL: String = data1[jOrgImageURL] as? String, let skills: String = data1[jSkills] as? String, let exp: String = data1[jJSExp] as? String, let eduLevel: String = data1[jJSEduLevel] as? String, let aboutme: String = data1[jJSAboutMe] as? String {
+                    self.savejobs(data: self.data, email: email, exp: exp, imageURL: imageURL, name: name, phone: phone, skills: skills, address: address, about: aboutme)
+                }
+            }
+        }
+    }
+    
+    func getJobData(uid: String) {
+        _ = AppDelegate.shared.db.collection(jJobs).whereField(jJobID, isEqualTo: uid).addSnapshotListener{ querySnapshot, error in
+            
+            guard let snapshot = querySnapshot else {
+                print("Error fetching snapshots: \(error!)")
+                return
+            }
+            
+            if snapshot.documents.count != 0 {
+                let data1 = snapshot.documents[0].data()
+                if let jJobDescription: String = data1[jJobDescription] as? String{
+                    self.lblDescription.text = jJobDescription.description
+                }
+            }
+        }
+    }
+    
+    
+    func savejobs(data: PostModel, email:String,exp:String,imageURL: String,name: String,phone: String,skills:String,address:String,about : String) {
         var ref : DocumentReference? = nil
         ref = AppDelegate.shared.db.collection(jJobSave).addDocument(data:
                                                                         [
-                                                                            jJobAddress: data.job_address,
+                                                                            jEmpEmail: data.user_email,
+                                                                            jPhone: data.user_phone,
+                                                                            jIsApproved: false,
+                                                                            jJobDescription: data.description,
+                                                                            jJobID: data.docID,
+                                                                            jLocation: data.job_address,
                                                                             jPostName : data.job_name,
-                                                                            jJobOType: data.job_oType,
-                                                                            jJobEmail: data.job_email,
-                                                                            jAddress: data.address,
+                                                                            jJSAboutMe: about,
+                                                                            jJSAddress: address,
+                                                                            jsEmail: email,
+                                                                            jJSExp: exp,
+                                                                            jJSImageURL:imageURL,
+                                                                            jJSName: name,
+                                                                            jJSPhone: phone,
+                                                                            jSkills: skills,
+                                                                            jOrgAddress: address,
+                                                                            jOrgType: data.job_oType,
                                                                             jJobSalary : data.job_salary,
-                                                                            jDescription : data.description,
                                                                             jRequirement : data.requirement,
-                                                                            jUserEmail : email,
-                                                                            jFavID: data.docID,
                                                                             jUID: GFunction.user.docID
                                                                         ])
         {  err in
@@ -117,7 +184,7 @@ class JobDetailsVC: UIViewController {
             }
             if snapshot.documents.count == 0 {
                 self.isFav = true
-                self.savejobs(data: data,email: email)
+                self.getData(uid: GFunction.user.docID)
             }else{
                 if !self.isFav {
                     Alert.shared.showAlert(message: "Job has been already existing into Save list!!!", completion: nil)
